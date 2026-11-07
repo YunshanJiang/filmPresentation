@@ -1,0 +1,358 @@
+[
+  {
+    "number": 1,
+    "title": "封面",
+    "video": "filmclip/1.mp4",
+    "panels": [
+      {
+        "quad": [
+          [
+            62,
+            28
+          ],
+          [
+            802,
+            28
+          ],
+          [
+            802,
+            210
+          ],
+          [
+            62,
+            210
+          ]
+        ],
+        "html": "<div class=\"cover-layout\"><div class=\"cover-identity\"><img class=\"cover-logo\" src=\"assets/dreamlan-logo.svg\" alt=\"dream兰\"><div class=\"cover-tag\">Dream. Create. Connect.</div></div><div class=\"cover-message\"><p class=\"sub\">让一个人的能力，<br>长成一份<span class=\"cover-accent\">事业。</span></p><div class=\"meta\">OPC 社区 / 兰州 · 桃海步行街<br><strong>11 月 8 日 FDE 沙龙</strong></div></div></div>",
+        "kind": "cover"
+      }
+    ]
+  },
+  {
+    "number": 2,
+    "title": "我们是谁",
+    "video": "filmclip/2.mp4",
+    "panels": [
+      {
+        "quad": [
+          [
+            81,
+            64
+          ],
+          [
+            780,
+            64
+          ],
+          [
+            780,
+            432
+          ],
+          [
+            81,
+            432
+          ]
+        ],
+        "html": "<div class=\"eyebrow\">DREAM LAN / OPEN COMMUNITY</div><h2>我们是 <span class=\"comic-emphasis\">dream兰 OPC</span></h2><p class=\"sub\">位于兰州桃海步行街（交大对面）的开放式 OPC 社区，连接 AI 学习者、创作者、开发者、创业者与企业。</p><div class=\"community-keywords\"><span>开放</span><span>活力</span><span>创意</span><span>前沿</span><span>年轻力</span><span>共创</span></div>",
+        "kind": "paper"
+      }
+    ]
+  },
+  {
+    "number": 3,
+    "title": "落地合作与项目",
+    "video": "filmclip/3.mp4",
+    "panels": [
+      {
+        "quad": [
+          [
+            58,
+            184
+          ],
+          [
+            221,
+            184
+          ],
+          [
+            221,
+            302
+          ],
+          [
+            58,
+            302
+          ]
+        ],
+        "html": "<b>01 地质博物馆</b><p>数字展馆建设</p>",
+        "kind": "project"
+      },
+      {
+        "quad": [
+          [
+            246,
+            184
+          ],
+          [
+            406,
+            184
+          ],
+          [
+            406,
+            302
+          ],
+          [
+            246,
+            302
+          ]
+        ],
+        "html": "<b>02 市属国企合作</b><p>战略合作已签署</p>",
+        "kind": "project"
+      },
+      {
+        "quad": [
+          [
+            432,
+            184
+          ],
+          [
+            594,
+            184
+          ],
+          [
+            594,
+            302
+          ],
+          [
+            432,
+            302
+          ]
+        ],
+        "html": "<b>03 兰州职业技术学院</b><p>非遗数字展馆</p>",
+        "kind": "project"
+      },
+      {
+        "quad": [
+          [
+            622,
+            184
+          ],
+          [
+            785,
+            184
+          ],
+          [
+            785,
+            302
+          ],
+          [
+            622,
+            302
+          ]
+        ],
+        "html": "<b>04 卷云传</b><p>原创 IP 打造</p>",
+        "kind": "project"
+      }
+    ]
+  },
+  {
+    "number": 4,
+    "title": "我们能提供什么",
+    "video": "filmclip/4.mp4",
+    "panels": [
+      {
+        "quad": [
+          [
+            114,
+            62
+          ],
+          [
+            730,
+            62
+          ],
+          [
+            730,
+            422
+          ],
+          [
+            114,
+            422
+          ]
+        ],
+        "html": "<div class=\"eyebrow\">WHAT WE PROVIDE</div><h2>我们能提供的</h2><div class=\"grid\"><div class=\"card\"><b>空间与基础服务</b><p>办公与创业配套</p></div><div class=\"card\"><b>技术与算力</b><p>工具、资源与实践</p></div><div class=\"card\"><b>场景与订单</b><p>连接需求与交付</p></div><div class=\"card\"><b>FDE 与企业成长</b><p>人才培育与申报支持</p></div><div class=\"card\"><b>商业与资本</b><p>对接市场与伙伴</p></div><div class=\"card\"><b>垂直赛道</b><p>聚焦真实产业需求</p></div></div>",
+        "kind": "paper"
+      }
+    ]
+  },
+  {
+    "number": 5,
+    "title": "空间与技术",
+    "video": "filmclip/5.mp4",
+    "panels": [
+      {
+        "quad": [
+          [
+            174,
+            94
+          ],
+          [
+            693,
+            94
+          ],
+          [
+            693,
+            284
+          ],
+          [
+            174,
+            284
+          ]
+        ],
+        "html": "<div class=\"eyebrow\">SPACE & TECHNOLOGY</div><h2>空间 × <span class=\"highlight\">技术</span></h2><div class=\"grid\"><div class=\"card\"><b>轻装开始</b><p>规划共享工位、会议、直播与路演空间，配套创业服务。</p></div><div class=\"card\"><b>加速实践</b><p>拟对接云厂商，探索算力、AI 工具与开发资源。</p></div></div><p class=\"note\">设施与资源以实际落地为准。</p>",
+        "kind": "paper"
+      }
+    ]
+  },
+  {
+    "number": 6,
+    "title": "场景与订单",
+    "video": "filmclip/6.mp4",
+    "panels": [
+      {
+        "quad": [
+          [
+            126,
+            107
+          ],
+          [
+            722,
+            109
+          ],
+          [
+            722,
+            383
+          ],
+          [
+            126,
+            383
+          ]
+        ],
+        "html": "<div class=\"eyebrow\">SCENES & ORDERS</div><h2>让能力遇见<span class=\"highlight\">需求</span></h2><p class=\"sub\">对接政府、国企与企业需求，探索适合个人和小团队的项目。</p><div class=\"flow\"><span>收集需求</span>→<span>拆解任务</span>→<span>匹配成员</span>→<span>协作交付</span></div><p class=\"note\">项目按实际需求与双方约定匹配。</p>",
+        "kind": "paper"
+      }
+    ]
+  },
+  {
+    "number": 7,
+    "title": "FDE与企业服务",
+    "video": "filmclip/7.mp4",
+    "panels": [
+      {
+        "quad": [
+          [
+            163,
+            101
+          ],
+          [
+            691,
+            102
+          ],
+          [
+            691,
+            386
+          ],
+          [
+            163,
+            386
+          ]
+        ],
+        "html": "<div class=\"eyebrow\">FDE & ENTERPRISE</div><h2>培养人才，<span class=\"highlight\">支持成长</span></h2><div class=\"grid\"><div class=\"card\"><b>FDE 实训</b><p>从需求调研、AI 应用到智能体开发与项目交付。</p></div><div class=\"card\"><b>企业服务</b><p>对接财税、法务与知识产权服务，协助政策研判和项目申报。</p></div></div><p class=\"note\">服务以实际合作为准；申报按当期规则审核。</p>",
+        "kind": "paper"
+      }
+    ]
+  },
+  {
+    "number": 8,
+    "title": "商业与赛道",
+    "video": "filmclip/8.mp4",
+    "panels": [
+      {
+        "quad": [
+          [
+            112,
+            126
+          ],
+          [
+            745,
+            126
+          ],
+          [
+            745,
+            316
+          ],
+          [
+            112,
+            316
+          ]
+        ],
+        "html": "<div class=\"eyebrow\">BUSINESS & SECTORS</div><h2>连接市场，<span class=\"highlight\">聚焦赛道</span></h2><div class=\"grid\"><div class=\"card\"><b>商业与资本</b><p>通过路演与社群，探索对接客户、伙伴及投资资源。</p></div><div class=\"card\"><b>垂直赛道</b><p>AI+制造、数字内容、跨境电商、智慧农业。</p></div></div><p class=\"note\">资源为拟对接方向，合作以实际进展为准。</p>",
+        "kind": "paper"
+      }
+    ]
+  },
+  {
+    "number": 9,
+    "title": "未来发展方向",
+    "video": "filmclip/9.mp4",
+    "panels": [
+      {
+        "quad": [
+          [
+            111,
+            109
+          ],
+          [
+            626,
+            168
+          ],
+          [
+            625,
+            322
+          ],
+          [
+            102,
+            347
+          ]
+        ],
+        "html": "<div class=\"eyebrow\">WHAT COMES NEXT</div><h2>未来<span class=\"highlight\">方向</span></h2><div class=\"grid\"><div class=\"card\"><b>01 培训</b><p>FDE 与 AI 应用实践</p></div><div class=\"card\"><b>02 影视</b><p>内容创作、IP 孵化与发行</p></div><div class=\"card\"><b>03 电商</b><p>内容运营与跨境业务</p></div><div class=\"card\"><b>04 智能体</b><p>业务智能体与工作流开发</p></div></div>",
+        "kind": "paper"
+      }
+    ]
+  },
+  {
+    "number": 10,
+    "title": "开放招募",
+    "video": "filmclip/10.mp4",
+    "panels": [
+      {
+        "quad": [
+          [
+            220,
+            124
+          ],
+          [
+            681,
+            92
+          ],
+          [
+            681,
+            389
+          ],
+          [
+            219,
+            363
+          ]
+        ],
+        "html": "<div class=\"eyebrow\">JOIN US</div><h2>开放招募，<span class=\"highlight\">一起共创</span></h2><p class=\"sub\">欢迎不同年龄、职业与背景的朋友。</p><div class=\"grid\"><div class=\"card\"><b>带着作品来</b><p>交流项目，寻找伙伴。</p></div><div class=\"card\"><b>带着好奇来</b><p>从兴趣开始，探索可能。</p></div></div><p class=\"note\">不设行业或能力门槛。</p><p class=\"ending\">先加入社群，一起认识、交流、探索。</p>",
+        "kind": "paper"
+      }
+    ]
+  }
+]

@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#111018">
+  <link rel="icon" href="data:,">
+  <title>dream兰 · 走进桃海 OPC 社区</title>
+  <link rel="stylesheet" href="film.css">
+  <script defer src="film-data.js"></script>
+  <script defer src="film.js?v=remote1"></script>
+  <script defer src="remote-host.js"></script>
+</head>
+<body>
+<svg xmlns="http://www.w3.org/2000/svg" width="0" height="0" aria-hidden="true" style="position:absolute;pointer-events:none"><defs><filter id="comic-ink" x="-8%" y="-15%" width="116%" height="140%" color-interpolation-filters="sRGB"><feTurbulence type="fractalNoise" baseFrequency=".065" numOctaves="2" seed="12" result="grain"/><feDisplacementMap in="SourceGraphic" in2="grain" scale=".8" xChannelSelector="R" yChannelSelector="G"/></filter></defs></svg>
+<main id="app">
+  <header class="topbar">
+    <a class="brand" href="./" aria-label="dream兰首页">dream<span>兰</span><i></i></a>
+    <p class="edition">桃海 OPC 社区<span>一段从想法开始的旅程</span></p>
+    <div class="utilities">
+      <button id="remoteToggle" class="icon-button">手机遥控</button>
+      <button id="sound" class="icon-button" aria-label="开启视频声音" aria-pressed="false">声音 <span>关</span></button>
+      <button id="fullscreen" class="icon-button" aria-label="全屏演示">全屏 ↗</button>
+    </div>
+  </header>
+  <div class="screen-host" id="screenHost">
+    <div class="screen" id="screen" aria-label="社区互动影片">
+      <img id="opening" src="film-stills/01-start.png" alt="桃海社区庭院" fetchpriority="high">
+      <video class="film" id="videoA" playsinline muted preload="auto" aria-hidden="true"></video>
+      <video class="film" id="videoB" playsinline muted preload="auto" aria-hidden="true"></video>
+      <div id="textPlane" class="text-plane" aria-live="polite" aria-label="当前页内容"></div>
+      <div id="welcome" class="welcome"><button id="begin"><span>走进 dream兰</span><b>开始放映 ↗</b></button><p>10 个场景 · 由你掌握讲述节奏</p></div>
+      <div id="loadNotice" class="load-notice" hidden><span class="spinner"></span>正在准备下一幕</div>
+      <div id="errorNotice" class="error-notice" hidden role="alert"><p id="errorMessage"></p><button id="retry">重新播放</button></div>
+    </div>
+  </div>
+  <footer class="controls">
+    <div class="chapter-meta"><span id="chapterNumber">INTRO</span><strong id="chapterTitle">让一个人的能力，长成一份事业。</strong><small id="status" role="status">点击开始 · 方向键切换</small></div>
+    <nav id="chapters" class="chapters" aria-label="影片章节"></nav>
+    <div class="transport"><button id="previous" aria-label="上一页" disabled>←</button><button id="replay" aria-label="重播当前运镜" title="重播当前运镜（R）" disabled>↻</button><button id="next">开始放映 <span>→</span></button></div>
+    <div class="progress-track"><div id="progress"></div></div>
+  </footer>
+</main>
+<noscript>请启用 JavaScript，以播放社区影片与显示对应文案。</noscript>
+</body>
+</html>
