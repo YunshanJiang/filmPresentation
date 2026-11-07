@@ -27,14 +27,16 @@
   let caseOpen=false,caseAnimation,currentCase=-1,blockedCase=-1;
   const caseView=document.createElement('section');caseView.className='case-view';caseView.hidden=true;
   caseView.setAttribute('aria-label','广告牌实践案例');
-  function closeCase(){
+  function closeCase(remote=false){
+    if(remote!==true&&window.filmRemoteController){window.dispatchEvent(new CustomEvent("film:remote-command",{detail:{action:"case-close"}}));return;}
     if(!caseOpen)return;blockedCase=currentCase;caseOpen=false;caseAnimation?.cancel();
     caseView.querySelector('video')?.pause();caseView.replaceChildren();caseView.hidden=true;
     $('screen').classList.remove('case-active');stage.style.transform='none';
     plane.querySelectorAll('.surface.project').forEach(el=>el.style.visibility='');caseView.remove();
   }
-  function openCase(n,source){
-    if(state.busy||state.index!==2||caseOpen||blockedCase===n||plane.classList.contains('brush-running'))return;
+  function openCase(n,source,remote=false){
+    if(remote!==true&&window.filmRemoteController){window.dispatchEvent(new CustomEvent("film:remote-command",{detail:{action:"case-open",target:n}}));return;}
+    if(state.busy||state.index!==2||caseOpen||(!remote&&blockedCase===n)||plane.classList.contains('brush-running'))return;
     currentCase=n;caseOpen=true;caseView.hidden=false;$('screen').classList.add('case-active');
     const q=slides[2].panels[n].quad;
     const cx=q.reduce((a,v)=>a+v[0],0)/4,cy=q.reduce((a,v)=>a+v[1],0)/4;
@@ -63,6 +65,7 @@
   const brushTextures=['01-flat','02-dry','03-narrow','04-diagonal'].map(name=>{
     const im=new Image();im.src=`assets/brush-masks-v1/${name}.png`;return im;
   });
+  let brushStarted=0,brushMode="reveal";
   let brushRun=0,brushFrame=0,brushTargets=[],brushResolve;
   function cancelBrushReveal(){
     brushRun++;cancelAnimationFrame(brushFrame);brushResolve?.(false);brushResolve=null;
@@ -75,11 +78,12 @@
     if(matchMedia('(prefers-reduced-motion: reduce)').matches)return;
     brushTargets.forEach(el=>{el.classList.add('paint-pending');el.style.maskImage='linear-gradient(transparent,transparent)';el.style.webkitMaskImage=el.style.maskImage;});
   }
-  async function startBrushReveal({erase=false}={}){
+  async function startBrushReveal({erase=false,elapsed=0}={}){
     if(state.index<1||!brushTargets.length||matchMedia('(prefers-reduced-motion: reduce)').matches)return;
     const run=++brushRun;cancelAnimationFrame(brushFrame);brushResolve?.(false);brushResolve=null;
     brushTargets.forEach(el=>el.querySelector('.paint-swipe')?.remove());
     const snapshots=erase?brushTargets.map(el=>el.style.maskImage||'none'):[];
+    brushStarted=performance.now()-elapsed;brushMode=erase?'erase':'reveal';
     plane.classList.add('brush-running');
     await Promise.all(brushTextures.map(im=>im.decode().catch(()=>{})));
     if(run!==brushRun||state.index<1||state.phase!==(erase?'erasing':'holding'))return;
@@ -102,7 +106,7 @@
       return {el,ctx,canvas,paint,paintCtx:paint.getContext('2d'),variant:i%3,texture,delay,duration,swipe,original:erase?originals[i]:null,last:-1,done:false};
     });
     return new Promise(resolve=>{brushResolve=resolve;
-    const start=performance.now();let lastPaint=-Infinity;
+    const start=performance.now()-elapsed;brushStarted=start;brushMode=erase?"erase":"reveal";let lastPaint=-Infinity;
     const tick=now=>{
       if(run!==brushRun)return;
       if(now-lastPaint<30){brushFrame=requestAnimationFrame(tick);return;}lastPaint=now;
@@ -155,7 +159,7 @@
   }
   const distance=(a,b)=>Math.hypot(a[0]-b[0],a[1]-b[1]);
   function buildText(index){
-    closeCase();cancelBrushReveal();plane.classList.remove("brush-test");plane.style.visibility="";
+    closeCase(true);cancelBrushReveal();plane.classList.remove("brush-test");plane.style.visibility="";
     plane.replaceChildren();
     for(const panel of slides[index].panels){
       const q=panel.quad,w=panel.kind==='project'?420:1000;
@@ -273,6 +277,7 @@
     window.dispatchEvent(new CustomEvent('film:hold',{detail:{index:state.index,number:state.index+1}}));
   }
   async function go(index,options={}){
+    if(window.filmRemoteController){window.dispatchEvent(new CustomEvent("film:remote-command",{detail:{action:"navigate",target:index}}));return;}
     if(state.busy||index<0||index>=slides.length)return;
     closeCase();
     const token=++state.token;
@@ -330,7 +335,7 @@
   }
   slides.forEach((slide,i)=>{const b=document.createElement('button');b.textContent=String(i+1).padStart(2,'0');b.title=slide.title;b.setAttribute('aria-label',`第${i+1}页 ${slide.title}`);b.onclick=()=>go(i);$('chapters').append(b);});
   $('begin').onclick=()=>go(0);$('next').onclick=()=>go(state.index+1);$('previous').onclick=()=>go(state.index-1);$('replay').onclick=()=>go(state.index);$('retry').onclick=()=>go(state.failed??Math.max(state.index,0),{reverseSource:state.failedReverse??null});
-  $('sound').onclick=()=>{state.muted=!state.muted;videos.forEach(v=>v.muted=state.muted);$('sound').querySelector('span').textContent=state.muted?'关':'开';$('sound').setAttribute('aria-pressed',String(!state.muted));$('sound').setAttribute('aria-label',state.muted?'开启视频声音':'关闭视频声音');};
+  $('sound').onclick=()=>{if(window.filmRemoteController){window.dispatchEvent(new CustomEvent('film:remote-command',{detail:{action:'sound'}}));return;}state.muted=!state.muted;videos.forEach(v=>v.muted=state.muted);$('sound').querySelector('span').textContent=state.muted?'关':'开';$('sound').setAttribute('aria-pressed',String(!state.muted));$('sound').setAttribute('aria-label',state.muted?'开启视频声音':'关闭视频声音');};
   $('fullscreen').onclick=async()=>{try{if(document.fullscreenElement)await document.exitFullscreen();else await $('app').requestFullscreen();}catch{status('请使用浏览器全屏快捷键 F11');}};
   document.addEventListener('fullscreenchange',()=>{document.body.classList.toggle('is-fullscreen',!!document.fullscreenElement);layout();});
   document.addEventListener('keydown',e=>{
@@ -355,5 +360,23 @@
   controls();
   loaded(videos[0],0).catch(()=>{});
   // Read-only diagnostics for presentation checks; navigation uses the public controls.
-  window.filmPresentation={get state(){return {...state};},slides};
+  let remoteClip=null,remoteBrush=null;
+  window.filmPresentation={get state(){return {...state};},slides,
+    snapshot(){const v=videos[state.active];return {...state,title:$('chapterTitle').textContent,caseIndex:caseOpen?currentCase:-1,clip:v?.dataset.clip||null,time:v?.currentTime||0,paused:v?.paused??true,planeVisible:plane.classList.contains('visible')&&plane.style.visibility!=='hidden',brush:plane.classList.contains('brush-running')?{mode:brushMode,elapsed:performance.now()-brushStarted}:null};},
+    command(c){if(c.action==='navigate')go(c.target);else if(c.action==='case-open'){blockedCase=-1;openCase(c.target,plane.querySelectorAll('.surface.project')[c.target]);}else if(c.action==='case-close')closeCase();else if(c.action==='sound')$('sound').click();else $(c.action)?.click();},
+    async mirror(s){
+      const changed=state.index!==s.index||state.token!==s.token;
+      if(changed){closeCase(true);cancelBrushReveal();remoteBrush=null;}
+      if(s.clip&&remoteClip!==s.clip){const reverse=s.clip.startsWith('reverse:'),n=Number(reverse?s.clip.slice(8):s.clip);await loaded(videos[0],n,reverse);remoteClip=s.clip;}
+      Object.assign(state,{index:s.index,token:s.token,busy:s.busy,phase:s.phase,muted:s.muted,active:s.clip?0:-1});
+      if(changed&&s.index>=0)buildText(s.index);
+      const v=videos[0];videos.forEach((video,i)=>video.classList.toggle('active',!!s.clip&&i===0));
+      if(s.clip){v.muted=true;v.onended=null;v.ontimeupdate=null;if(Math.abs(v.currentTime-s.time)>.25||s.paused&&Math.abs(v.currentTime-s.time)>.04)v.currentTime=s.time;if(s.paused)v.pause();else v.play().catch(()=>{});}
+      $('welcome').hidden=s.index>=0||s.busy;plane.style.visibility=s.planeVisible?'':'hidden';plane.classList.toggle('visible',s.planeVisible);
+      if(s.brush){const key=s.token+':'+s.brush.mode;if(remoteBrush!==key){remoteBrush=key;if(!brushTargets.length)prepareBrushReveal();startBrushReveal({erase:s.brush.mode==='erase',elapsed:s.brush.elapsed});}}
+      else if(plane.classList.contains('brush-running')||brushTargets.some(el=>el.classList.contains('paint-pending'))){cancelBrushReveal();remoteBrush=null;}
+      if(s.caseIndex>=0&&(!caseOpen||currentCase!==s.caseIndex)){closeCase(true);blockedCase=-1;openCase(s.caseIndex,plane.querySelectorAll('.surface.project')[s.caseIndex],true);}else if(s.caseIndex<0&&caseOpen)closeCase(true);
+      $('chapterTitle').textContent=s.title;$('chapterNumber').textContent=s.index<0?'INTRO':String(s.index+1).padStart(2,'0');$('sound').querySelector('span').textContent=s.muted?'关':'开';controls();status(s.busy?'电脑正在运镜 / 刷字':'手机操作同步控制电脑');
+    }
+  };
 })();

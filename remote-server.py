@@ -66,16 +66,19 @@ class Handler(SimpleHTTPRequestHandler):
                 client=self.headers.get('X-Host-ID')
                 if not client or (OWNER and OWNER!=client and time.monotonic()-SEEN<3):return self.reply({'error':'已有电脑演示窗口连接'},409)
                 OWNER=client;SEEN=time.monotonic()
-                STATE={k:data.get(k) for k in ('index','busy','title','phase')}
+                STATE={k:data.get(k) for k in ('index','busy','title','phase','token','muted','caseIndex','clip','time','paused','planeVisible','brush')}
                 if PENDING and data.get('ack')==PENDING['id']: PENDING=None
                 return self.reply({'ok':True})
             if self.path == '/api/command':
                 action=data.get('action');index=STATE['index']
-                if action not in ('next','previous','replay'):return self.reply({'error':'invalid action'},400)
+                if action not in ('next','previous','replay','navigate','case-open','case-close','sound'):return self.reply({'error':'invalid action'},400)
                 if time.monotonic()-SEEN>=3:return self.reply({'error':'电脑未连接'},409)
                 if STATE['busy'] or PENDING:return self.reply({'error':'转场中，请稍候'},409)
                 if (action=='previous' and index<=0) or (action=='next' and index>=9) or (action=='replay' and index<0):return self.reply({'error':'已到边界页'},409)
-                SERIAL+=1;PENDING={'id':SERIAL,'action':action,'index':index,'expires':time.time()+3}
+                target=data.get('target')
+                if action=='navigate' and (type(target) is not int or not 0<=target<=9):return self.reply({'error':'无效章节'},400)
+                if action=='case-open' and (index!=2 or type(target) is not int or not 0<=target<=3):return self.reply({'error':'无效案例'},400)
+                SERIAL+=1;PENDING={'id':SERIAL,'action':action,'target':target,'index':index,'expires':time.time()+3}
                 return self.reply({'ok':True,'id':SERIAL})
         self.reply({'error':'not found'},404)
 

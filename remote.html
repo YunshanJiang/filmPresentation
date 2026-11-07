@@ -1,9 +1,46 @@
-<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#17131d"><title>dream兰 · 手机遥控</title><link rel="icon" href="data:,"><style>
-*{box-sizing:border-box}body{margin:0;background:#17131d;color:#fff4da;font-family:'Microsoft YaHei',sans-serif;padding: max(24px,env(safe-area-inset-top)) 22px max(26px,env(safe-area-inset-bottom));min-height:100dvh}main{max-width:480px;margin:auto}header{display:flex;justify-content:space-between;align-items:center}.brand{font-size:25px;font-style:italic;font-weight:900}.brand em{color:#ff663e}.tag{font-size:11px;letter-spacing:2px;color:#a9a1af}.signal{margin-top:32px;color:#6fe1d7;font-size:13px}h1{font-size:70px;line-height:1;margin:20px 0 14px;font-style:italic;letter-spacing:-4px}h2{font-size:20px;min-height:60px;font-weight:500;line-height:1.5;margin-bottom:24px}button{font:inherit;touch-action:manipulation;cursor:pointer;-webkit-tap-highlight-color:transparent}button:disabled{opacity:.32;cursor:default}.next{display:flex;align-items:center;justify-content:space-between;width:100%;padding:32px 24px;background:#ffc847;color:#21152d;border:0;border-radius:4px;font-weight:900;font-size:28px;box-shadow:6px 7px 0 #fa5941;transform:rotate(-1deg)}.next b{font-size:48px;line-height:1}.row{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:30px}.row button{min-height:82px;color:#fff4da;background:#2b2334;border:1px solid #665574;border-radius:4px;font-size:17px}button:active:not(:disabled){transform:translateY(3px)}.note{font-size:13px;line-height:1.8;color:#b8aabc;margin-top:28px}.feedback{min-height:24px;font-size:14px;color:#ffc847;margin-top:24px}footer{border-top:1px solid #49394e;margin-top:38px;padding-top:18px;color:#97899c;font-size:11px;letter-spacing:2px}
-</style></head><body><main><header><div class="brand">dream<em>兰</em></div><span class="tag">FILM REMOTE / 局域网</span></header><p id="signal" class="signal" role="status">正在连接电脑…</p><h1 id="number">— / 10</h1><h2 id="title">准备好，开始讲述。</h2><button class="next" data-action="next" disabled><span id="nextLabel">下一页</span><b>↗</b></button><div class="row"><button data-action="previous" disabled>← 上一页</button><button data-action="replay" disabled>↻ 重播</button></div><p id="feedback" class="feedback" role="status"></p><p class="note">运镜与刷字完成后即可切换。<br>返回上一页时，电脑端视频会倒放。</p><footer>ONE STORY. TWO SCREENS.</footer></main><script>
-const key=new URLSearchParams(location.hash.slice(1)).get('key'),headers={'X-Remote-Key':key||'','Content-Type':'application/json'};
-const buttons=[...document.querySelectorAll('[data-action]')];let sending=false,state=null;
-function render(){const ok=state?.online&&!state.busy&&!state.pending&&!sending;for(const b of buttons)b.disabled=!ok||(b.dataset.action==='previous'&&state.index<=0)||(b.dataset.action==='replay'&&state.index<0)||(b.dataset.action==='next'&&state.index>=9);}
-async function poll(){try{if(!key)throw Error('请使用电脑提供的完整配对链接');const r=await fetch('/api/status',{headers,cache:'no-store'});const d=await r.json();if(!r.ok)throw Error(d.error);state=d;document.getElementById('signal').textContent=!d.online?'电脑已断开 · 等待重新连接':d.busy||d.pending?'● 正在运镜 / 刷字，请稍候':'● 电脑已连接 · 可以翻页';document.getElementById('number').textContent=d.index<0?'INTRO':String(d.index+1).padStart(2,'0')+' / 10';document.getElementById('title').textContent=d.title||'等待电脑连接';document.getElementById('nextLabel').textContent=d.index<0?'开始放映':'下一页';}catch(e){state=null;document.getElementById('signal').textContent=e.message||'连接断开，请检查 Wi-Fi 和电脑服务';}render();setTimeout(poll,450);}
-buttons.forEach(b=>b.onclick=async()=>{if(sending||b.disabled)return;sending=true;render();try{const r=await fetch('/api/command',{method:'POST',headers,body:JSON.stringify({action:b.dataset.action})});const d=await r.json();if(!r.ok)throw Error(d.error);if(state)state.pending=true;document.getElementById('feedback').textContent='指令已发送';navigator.vibrate?.(25);}catch(e){document.getElementById('feedback').textContent=e.message;}finally{sending=false;render();}});poll();
-</script></body></html>
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#111018">
+  <link rel="icon" href="data:,">
+  <title>dream兰 · 走进桃海 OPC 社区</title>
+  <link rel="stylesheet" href="film.css">
+  <script defer src="film-data.js"></script>
+  <script defer src="film.js?v=remote1"></script>
+  <script defer src="remote-host.js"></script>
+</head>
+<body>
+<svg xmlns="http://www.w3.org/2000/svg" width="0" height="0" aria-hidden="true" style="position:absolute;pointer-events:none"><defs><filter id="comic-ink" x="-8%" y="-15%" width="116%" height="140%" color-interpolation-filters="sRGB"><feTurbulence type="fractalNoise" baseFrequency=".065" numOctaves="2" seed="12" result="grain"/><feDisplacementMap in="SourceGraphic" in2="grain" scale=".8" xChannelSelector="R" yChannelSelector="G"/></filter></defs></svg>
+<main id="app">
+  <header class="topbar">
+    <a class="brand" href="film.html" aria-label="dream兰首页">dream<span>兰</span><i></i></a>
+    <p class="edition">桃海 OPC 社区<span>一段从想法开始的旅程</span></p>
+    <div class="utilities">
+      <button id="remoteToggle" class="icon-button">手机遥控</button>
+      <button id="sound" class="icon-button" aria-label="开启视频声音" aria-pressed="false">声音 <span>关</span></button>
+      <button id="fullscreen" class="icon-button" aria-label="全屏演示">全屏 ↗</button>
+    </div>
+  </header>
+  <div class="screen-host" id="screenHost">
+    <div class="screen" id="screen" aria-label="社区互动影片">
+      <img id="opening" src="film-stills/01-start.png" alt="桃海社区庭院" fetchpriority="high">
+      <video class="film" id="videoA" playsinline muted preload="auto" aria-hidden="true"></video>
+      <video class="film" id="videoB" playsinline muted preload="auto" aria-hidden="true"></video>
+      <div id="textPlane" class="text-plane" aria-live="polite" aria-label="当前页内容"></div>
+      <div id="welcome" class="welcome"><button id="begin"><span>走进 dream兰</span><b>开始放映 ↗</b></button><p>10 个场景 · 由你掌握讲述节奏</p></div>
+      <div id="loadNotice" class="load-notice" hidden><span class="spinner"></span>正在准备下一幕</div>
+      <div id="errorNotice" class="error-notice" hidden role="alert"><p id="errorMessage"></p><button id="retry">重新播放</button></div>
+    </div>
+  </div>
+  <footer class="controls">
+    <div class="chapter-meta"><span id="chapterNumber">INTRO</span><strong id="chapterTitle">让一个人的能力，长成一份事业。</strong><small id="status" role="status">点击开始 · 方向键切换</small></div>
+    <nav id="chapters" class="chapters" aria-label="影片章节"></nav>
+    <div class="transport"><button id="previous" aria-label="上一页" disabled>←</button><button id="replay" aria-label="重播当前运镜" title="重播当前运镜（R）" disabled>↻</button><button id="next">开始放映 <span>→</span></button></div>
+    <div class="progress-track"><div id="progress"></div></div>
+  </footer>
+</main>
+<noscript>请启用 JavaScript，以播放社区影片与显示对应文案。</noscript>
+</body>
+</html>

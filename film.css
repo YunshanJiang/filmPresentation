@@ -183,3 +183,5 @@
 .brush-running .project{cursor:progress!important}
 
 /* Optional, on-device hand interaction for intro and chapters 01–03. */
+
+.remote-dialog{max-width:min(560px,92vw);background:#191523;color:#fff0d5;border:2px solid #ffc84e;padding:28px;border-radius:12px}.remote-dialog p{line-height:1.8}.remote-links a{display:block;color:#55dfed;overflow-wrap:anywhere;margin:16px 0}.remote-offline #status{color:#ffc84e}@media(max-width:760px){.edition{display:none}.utilities{gap:10px}.remote-dialog{padding:18px}}
