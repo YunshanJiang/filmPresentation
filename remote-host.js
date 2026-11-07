@@ -26,10 +26,10 @@
    if(mobile){
     const s=await request('/api/status');online=s.online;snapshot=s;
     document.body.classList.toggle('remote-offline',!online);
-    if(online){await window.filmPresentation.mirror(s);lastIndex=s.index;}
+    if(online&&!document.body.classList.contains('desktop-mode')){await window.filmPresentation.mirror(s);lastIndex=s.index;}
     // In a stalled/offline connection, keep the visible page but disallow blind operations.
     button.textContent=!online?'手机控制 · 等待电脑':s.busy||s.pending?'手机控制 · 转场中':'手机控制 · 已同步';
-    message.textContent='手机显示与电脑相同的演示界面。翻页、章节选择、重播、展板展开与关闭、声音开关均控制电脑。画面由两端本地播放并同步，保持此页处于前台。全屏只作用于当前设备。第三方内嵌网站内部的操作不跨设备同步。';
+    message.textContent='手机显示与电脑相同的演示界面。翻页、章节选择、重播、展板展开与关闭、声音开关均控制电脑。画面由两端本地播放并同步，保持此页处于前台。全屏只作用于当前设备。要操作第三方内嵌网页，请切换「鼠标模式」，通过电脑实时桌面直接操作真实鼠标。';
    }else{
     const s=window.filmPresentation.snapshot();
     s.busy=s.busy||!['intro','holding'].includes(s.phase)||!!s.brush;

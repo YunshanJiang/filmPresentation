@@ -1,9 +1,12 @@
-"""LAN remote server, no third-party Python dependencies."""
+"""LAN presentation and optional Windows desktop mouse remote."""
 import argparse, json, secrets, socket, threading, time, webbrowser, sys
 from pathlib import Path
 from http.server import ThreadingHTTPServer, SimpleHTTPRequestHandler
 from urllib.parse import urlparse, parse_qs
 
+from desktop_control import DesktopControl
+
+DESKTOP = DesktopControl()
 ROOT = Path(__file__).resolve().parent
 TOKEN = secrets.token_urlsafe(24)
 LOCK = threading.Lock()
@@ -28,6 +31,15 @@ class Handler(SimpleHTTPRequestHandler):
         path = urlparse(self.path).path
         if path.startswith('/api/'):
             if not self.auth(): return self.reply({'error':'配对链接无效，请从电脑重新打开'},403)
+            if path == '/api/desktop/frame':
+                try:
+                    content,meta=DESKTOP.capture(self.headers.get('X-Desktop-ID',''))
+                    self.send_response(200);self.send_header('Content-Type','image/jpeg');self.send_header('Cache-Control','no-store')
+                    self.send_header('X-Desktop-Meta',json.dumps(meta));self.send_header('Content-Length',str(len(content)))
+                    self.end_headers();self.wfile.write(content)
+                except PermissionError as e:self.reply({'error':str(e)},403)
+                except (RuntimeError,OSError,ImportError) as e:self.reply({'error':str(e)},503)
+                return
             with LOCK:
                 if path == '/api/status': return self.reply({**STATE, 'online':time.monotonic()-SEEN<3, 'pending':PENDING is not None})
                 if path == '/api/host':
@@ -61,6 +73,17 @@ class Handler(SimpleHTTPRequestHandler):
             if not 0<length<4096: raise ValueError()
             data=json.loads(self.rfile.read(length))
         except (ValueError,TypeError):return self.reply({'error':'bad request'},400)
+        if self.path.startswith('/api/desktop/'):
+            try:
+                client=self.headers.get('X-Desktop-ID','')
+                if self.path=='/api/desktop/enable':result=DESKTOP.enable(client)
+                elif self.path=='/api/desktop/disable':result=DESKTOP.disable(client)
+                elif self.path=='/api/desktop/input':result=DESKTOP.input(client,data)
+                else:return self.reply({'error':'not found'},404)
+                return self.reply(result)
+            except PermissionError as e:return self.reply({'error':str(e)},403)
+            except (ValueError,TypeError) as e:return self.reply({'error':str(e)},400)
+            except (RuntimeError,OSError,ImportError) as e:return self.reply({'error':str(e)+'；请确认已安装 Pillow'},503)
         with LOCK:
             if self.path == '/api/state':
                 client=self.headers.get('X-Host-ID')
@@ -99,5 +122,5 @@ def main():
     if not args.no_open:webbrowser.open(host)
     try:server.serve_forever()
     except KeyboardInterrupt:pass
-    finally:server.server_close()
+    finally:DESKTOP.close();server.server_close()
 if __name__=='__main__':main()
